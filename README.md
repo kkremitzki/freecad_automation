@@ -1,5 +1,7 @@
 Usage:
 
+Edit `config.ini` with your `username`, `password`, `forum_number`, and/or `[forum URL]`.
+
     $ virtualenv env
     $ source env/bin/activate
     $ pip install -r requirements.txt
