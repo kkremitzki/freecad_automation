@@ -9,8 +9,7 @@ config.read('config.ini')
 
 forum = config.sections()[0]
 login = "/ucp.php?mode=login"
-#forum_number = 17 # Pull Requests
-forum_number = 2
+forum_number = config[forum]['forum_number'] # 17 == Pull Requests
 post = "/posting.php?mode=post&f={}".format(forum_number)
 
 headers = {'User-Agent': 'Mozilla/5.0'}
