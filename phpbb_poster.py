@@ -20,6 +20,8 @@ login_payload['username'] = config[forum]['username']
 login_payload['password'] = config[forum]['password']
 
 def grab_secrets(soup):
+    # DEBUG: print(soup)
+    # DEBUG: print(dir(soup))
     form_token = soup.find('input', {'name': 'form_token'})['value']
     lastclick = soup.find('input', {'name': 'lastclick'})['value']
     creation_time = soup.find('input', {'name': 'creation_time'})['value']
@@ -35,8 +37,15 @@ def make_topic(new_topic_request):
     return data
 
 def new_topic(subj, msg):
+    # forum summaries are limited to 120 chars
+    if len(subj) > 120:
+        raise RuntimeError("Subject exceeds 120 chars.")
     with sessions.BaseUrlSession(base_url=forum) as s:
         login_request = s.post(forum + login, headers=headers, data=login_payload)
+        # DEBUG: print(login_request.text)
+        soup = BS(login_request.text, "lxml")
+        time.sleep(2.5)
+        # DEBUG: print(soup)
         new_topic_request = s.get(forum + post, headers=headers)
         data = make_topic(new_topic_request)
         data['subject'], data['message'] = subj, msg
