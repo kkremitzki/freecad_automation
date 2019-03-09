@@ -38,6 +38,9 @@ def make_topic(new_topic_request):
 
 def new_topic(subj, msg):
     with sessions.BaseUrlSession(base_url=forum) as s:
+        # forum summaries are limited to 120 chars
+        if len(subj) > 120:
+            raise RuntimeError("Subject exceeds 120 chars.")
         login_request = s.post(forum + login, headers=headers, data=login_payload)
         # DEBUG: print(login_request.text)
         soup = BS(login_request.text, "lxml")
